@@ -4,16 +4,32 @@ from io import StringIO
 class Struct:
     pass
 
+def isint(s):
+    try:
+        int(s)
+        return True
+    except:
+        return False
+
+
+def sanitise(string):
+    if isint(string[0]):
+        string = '_' + string
+    return re.sub('\W', '_', string)
+
+
 def to_struct(string):
     in_paren = False
     struct = Struct()
     ii = 0
     for i, char in enumerate(string):
         if i == len(string) - 1:
-            setattr(struct, *string[ii:].strip().split('=', 1))
+            k, v = string[ii:].strip().split('=', 1)
+            setattr(struct, sanitise(k), v)
             continue
         if char == ',' and not in_paren:
-            setattr(struct, *string[ii:i].strip().split('=', 1))
+            k, v = string[ii:i].strip().split('=', 1)
+            setattr(struct, sanitise(k), v)
             ii = i + 1
             continue
         if char == '(':
@@ -46,6 +62,7 @@ class Genkey:
                     parent = data
                 c, data = line[1:].split(' ', 1)
 
+            c = sanitise(c)
             data = to_struct(data)
 
             if hasattr(parent, c):
