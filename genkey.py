@@ -54,3 +54,4 @@ class Genkey:
                 getattr(parent, c).append(data)
             else:
                 setattr(parent, c, data)
+        buf.close()
