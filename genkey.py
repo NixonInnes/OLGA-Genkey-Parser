@@ -7,6 +7,7 @@ class Struct:
 
 
 def isint(s):
+    """Check whether an object is (can be converted to) an integer"""
     try:
         int(s)
         return True
@@ -15,12 +16,15 @@ def isint(s):
 
 
 def sanitise(string):
+    """Sanitise a string for variable naming"""
     if isint(string[0]):
         string = '_' + string
     return re.sub('\W', '_', string)
 
 
 def to_struct(string):
+    """Parse a string into Struct objects, splitting on commas whilst
+    considering bracketed parenthesis."""
     in_paren = False
     struct = Struct()
     ii = 0
@@ -44,6 +48,11 @@ def to_struct(string):
 
 
 class Genkey:
+    """Parse an OLGA genkey file; parameters are nested into this parent
+    i.e
+    >>> Genkey('olga.genkey').FILES.PVTFILE
+    'path/to/pvtfile.tab'
+    """
     def __init__(self, filename):
         self.filename = filename
         buf = StringIO()
