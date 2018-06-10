@@ -1,8 +1,10 @@
 import re
 from io import StringIO
 
+
 class Struct:
     pass
+
 
 def isint(s):
     try:
